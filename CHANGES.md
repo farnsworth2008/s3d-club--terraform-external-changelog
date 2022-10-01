@@ -6,3 +6,10 @@ Recently completed and planned work is tracked here.
 
 ## [0.1.0](.)
 - Created 1st release
+
+## [0.1.1](.)
+- Added inline doc for `main.tf`
+- Changed `local.data` to shield output
+- Fixed `\t` bug in `CONTRIBUTING.md`
+- Improved `README.md`
+- Removed `s3d-post-flow`
