@@ -27,16 +27,16 @@ the data structure that the script must produce.
 }
 ```
 
-In the context of the script output above, this module produces output for
-`tags` by adding a `version-${module}` entry where the module's version is
-provided. The tag uses the suffix `-pre-release` rather then the actual
-pre-release number in order to avoid what would otherwise be a lot of _"noise"_
-in plan output that would result where every resource that is tagged is
-adjusted to show the small ticks in pre-release numbering. Release status tags
-do not include the pre-release suffix.
-
 Automated tagging allows teams to determine what versions of their
 Terraform modules were involed in the the creation of resources.
+
+In the context of the script output above, this module produces output for
+`tags` adding a `pre-release-ec2: 0.1.1` entry. The prefix `pre-` is added
+rather then usin gthe actual pre-release number in order to avoid what would
+otherwise be a lot of _"noise"_ in plan output that would result where every
+resource that is tagged is adjusted to show the small ticks in pre-release
+numbering.  Release tags do not include the `pre-` prefix and in construction
+of the tag name the substring `terraform-aws` is always removed.
 
 Using this module, resources are tagged with version information for the
 module(s) that define them.  The process is additive such that an ec2 instance
@@ -45,15 +45,14 @@ modules in the chain that defined it.
 
 ```json
 {
-  "version-foohat-root-site-group": "0.0.922-pre-release",
-  "version-foohat-info-site": "0.1.732-pre-release",
-  "version-terraform-aws-site": "0.1.4",
-  "version-terraform-aws-ec2": "0.1.1"
+  "pre-release-root-foohat-site-group": "0.0.922",
+  "pre-release-foohat-info-site": "0.1.732",
+  "release-site": "0.1.4",
+  "release-ec2": "0.1.1"
 }
 ```
 
 ## Implementation notes
-
 ### Using `local.data` to structure output
 This module is a wrapper around the `s3d-flow-json` script. In the current
 implementation, the script reads the `CHANGES.md` to determine version

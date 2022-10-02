@@ -13,3 +13,8 @@ Recently completed and planned work is tracked here.
 - Fixed `\t` bug in `CONTRIBUTING.md`
 - Improved `README.md`
 - Removed `s3d-post-flow`
+
+## [0.1.2](.)
+- Improved `README.md`
+- Improved descriptions on inputs and outputs
+- Improved implementation with a better tagging scheme
