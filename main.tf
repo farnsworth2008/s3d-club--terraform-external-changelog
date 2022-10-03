@@ -2,7 +2,12 @@
 #
 # The "s3d-flow-json" provides data about the current module.
 data "external" "this" {
-  program = ["s3d-flow-json"]
+  program = ["bash", "-c", <<-EOT
+    out="$(s3d-flow-json 2>&1 | jq . 2>&1)" \
+    || out="{\"error\": \"s3d-flow-json failed to run\"}"
+    echo "$out"
+    EOT
+  ]
 
   working_dir = var.path
 }
@@ -13,10 +18,10 @@ locals {
 
   # See comments about this in "README.md"
   data = {
-    is_final = coalesce(local.result.is_final)
-    latest   = coalesce(local.result.latest)
-    module   = coalesce(local.result.module)
-    release  = coalesce(local.result.release)
+    is_final = try(local.result.is_final, false)
+    latest   = try(local.result.latest, "ERROR")
+    module   = try(local.result.module, "ERROR")
+    release  = try(local.result.release, "ERROR")
   }
 
   # The module name here is the way we want it named for the our tag. In this

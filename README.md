@@ -16,7 +16,7 @@ This module depends on scripts defined in
 ## Usage Notes
 This module wrapper around a script exists to provide output about the module
 in the directory where the script is executed. The following is an example of
-the data structure that the script must produce.
+the data structure that the script should produce.
 
 ```json
 {
@@ -26,6 +26,11 @@ the data structure that the script must produce.
   "is_final": "false"
 }
 ```
+
+If the script fails to execute the scripting within the external produces a
+valid json result because we feel this is not a fatal failure since the lost
+information is only the resource tags. We also find that the output of tags
+with the string of "ERROR" is easier to troubleshoot.
 
 Automated tagging allows teams to determine what versions of their
 Terraform modules were involed in the the creation of resources.
