@@ -1,6 +1,5 @@
 # Changes Module
-This module is a data only resource which reports information about changes
-defined in a [CHANGES.md](https://go.s3d.club/changes) file.
+A Teraform module that reads from the `CHANGES.md` file.
 
 ## Additional Documents
 Please read our [LICENSE][lice], [CONTRIBUTING][cont], [CODE-OF-CONDUCT][code],
@@ -9,6 +8,10 @@ are update.
 
 ## Overview
 This module allows other Terraform modules to read data about themselves.
+
+This module reports information about changes defined in a
+[CHANGES.md](https://go.s3d.club/changes) file.
+
 
 This module depends on scripts defined in
 [s3d-scripts](https://go.s3d.club/scripts).
@@ -20,10 +23,10 @@ the data structure that the script should produce.
 
 ```json
 {
-  "module": "terraform-aws-ec2",
-  "release": "0.1.1",
+  "is_final": "false",
   "latest": "0.1.1-1042",
-  "is_final": "false"
+  "module": "terraform-aws-ec2",
+  "release": "0.1.1"
 }
 ```
 
@@ -50,10 +53,10 @@ modules in the chain that defined it.
 
 ```json
 {
-  "pre-release-root-foohat-site-group": "0.0.922",
   "pre-release-foohat-info-site": "0.1.732",
-  "release-site": "0.1.4",
-  "release-ec2": "0.1.1"
+  "pre-release-root-foohat-site-group": "0.0.922",
+  "release-ec2": "0.1.1",
+  "release-site": "0.1.4"
 }
 ```
 

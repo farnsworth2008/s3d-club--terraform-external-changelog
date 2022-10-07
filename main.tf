@@ -1,6 +1,6 @@
 # This external requires that "s3d-flow-json" exists on the filesysem path.
 #
-# The "s3d-flow-json" provides data about the current module.
+# The "s3d-flow-json" script provides data about the current module.
 data "external" "this" {
   program = ["bash", "-c", <<-EOT
     out="$(s3d-flow-json)" || out="{}"
@@ -38,12 +38,11 @@ locals {
     replace(replace(local.data.module, "terraform-aws-", ""), "terraform-", "")
   )
 
-  tags = merge(
-    var.tags,
-    local.data.is_final ? {
-      ("tf-release-${local.module_name}") = local.data.release
-      } : {
-      ("tf-pre-release-${local.module_name}") = local.data.release
-    },
+  tags = merge(var.tags, {
+    ("-release-${local.module_name}") = local.data.release
+  })
+
+  tag_prefix = (
+    local.data.is_final ? "tf-" : "tf-pre-"
   )
 }

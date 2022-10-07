@@ -1,17 +1,8 @@
-output "release" {
-  value = local.data.release
-
-  description = <<-END
-    the release.
-    https://go.s3d.club/tf/changes#release
-    END
-}
-
 output "tags" {
   value = local.tags
 
-  description = <<-END
-    the tags.
+  description = <<-EOT
+    a map with tags that describe the content of `CHANGES.md`.
     https://go.s3d.club/tf/changes#tags
-    END
+    EOT
 }
