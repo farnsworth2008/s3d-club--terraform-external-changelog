@@ -29,8 +29,10 @@ locals {
   # turn out like "tf-external-foo" as our tag names.
   #
   # The root module gets a special name with "root-" as a prefix.
-  module_name = (
-    local.is_root ? "root-${local.module_short_name}" : local.module_short_name
+  module_name = replace(
+    local.is_root ? "root-${local.module_short_name}" : local.module_short_name,
+    "_",
+    "-",
   )
 
   # See comment about "module_name".
@@ -39,10 +41,10 @@ locals {
   )
 
   tags = merge(var.tags, {
-    ("-release-${local.module_name}") = local.data.release
+    (join("-", [local.tag_prefix, local.module_name])) = local.data.release
   })
 
   tag_prefix = (
-    local.data.is_final ? "tf-" : "tf-pre-"
+    local.data.is_final ? "tf" : "tf-test"
   )
 }
