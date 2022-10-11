@@ -12,16 +12,16 @@ data "external" "this" {
 }
 
 locals {
-  result  = data.external.this.result
-  is_root = var.path == path.root
-
-  # See comments about this in "README.md"
+  # See comments in "README.md".
   data = {
     is_final = try(local.result.is_final, false)
     latest   = try(local.result.latest, "error")
     module   = try(local.result.module, "error")
     release  = try(local.result.release, "error")
   }
+
+  # Determine of the module is the root module.
+  is_root = var.path == path.root
 
   # The module name here is the way we want it named for the our tag. In this
   # name "terraform-aws-" and "terraform-" are converted to "tf-". For modules
@@ -40,10 +40,17 @@ locals {
     replace(replace(local.data.module, "terraform-aws-", ""), "terraform-", "")
   )
 
+  # The result of "s3d-flow-json"
+  result = data.external.this.result
+
+  # The tags here are the ones this module provides as output. These tags
+  # include the input tags as well as a tag based on the current module.
   tags = merge(var.tags, {
     (join("-", [local.tag_prefix, local.module_name])) = local.data.release
   })
 
+  # We include "test" as part of our prefix if the module is a pre-release
+  # version.
   tag_prefix = (
     local.data.is_final ? "tf" : "tf-test"
   )
