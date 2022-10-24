@@ -6,3 +6,6 @@ Recently completed and planned work is tracked here.
 
 ## [0.1.10](.)
 - Added `terraform.tf`
+
+## [0.1.11-1000](.)
+- Updated `.terraform.lock.hcl`
