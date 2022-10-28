@@ -1,11 +1,8 @@
 # Changes
-Recently completed and planned work is tracked here.
+This file describes the project history as it relates to tagged versions.
 
-## [0.0.2](.) [0.1.13](.)
+## [0.0.2](.) to [0.1.14](.)
 - Created early releases
 
-## [0.1.14](.)
-- Updated `.terraform.lock.hcl`
-
-## [0.1.15](.) to [0.1.16](.)
+## [0.1.15](.) to [0.1.17](.)
 - Improved descriptions of variables and outputs
