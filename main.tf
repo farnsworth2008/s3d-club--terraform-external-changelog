@@ -3,7 +3,7 @@
 # The "s3d-flow-json" script provides data about the current module.
 data "external" "this" {
   program = ["bash", "-c", <<-EOT
-    out="$(s3d-flow-json)" || out="{}"
+    out="$(${path.module}/s3d-flow-json)" || out="{}"
     echo "$out"
     EOT
   ]
