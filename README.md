@@ -1,5 +1,5 @@
 # Changes Module
-A Teraform module for the mangement of tags.
+A Teraform module for mangement of tags related to module versions.
 
 ## Additional Documents
 Please read our [LICENSE][lice], [CONTRIBUTING][cont], [CODE-OF-CONDUCT][code],
