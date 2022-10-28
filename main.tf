@@ -3,7 +3,14 @@
 # The "s3d-flow-json" script provides data about the current module.
 data "external" "this" {
   program = ["bash", "-c", <<-EOT
-    out="$(s3d-flow-json)" || out="{}"
+    out="$(./s3d-flow-json 2>&1)" || {
+      log="$(pwd)/$(uuidgen).log"
+      echo "$out" >> "$log"
+      out=""
+      out="$out{"
+      out="$out  \"error\": \"error in $log\""
+      out="$out}"
+    }
     echo "$out"
     EOT
   ]
@@ -15,9 +22,9 @@ locals {
   # See comments in "README.md".
   data = {
     is_final = try(local.result.is_final, false)
-    latest   = try(local.result.latest, "error")
-    module   = try(local.result.module, "error")
-    release  = try(local.result.release, "error")
+    latest   = try(local.result.latest, local.result.error)
+    module   = try(local.result.module, local.result.error)
+    release  = try(local.result.release, local.result.error)
   }
 
   # Determine of the module is the root module.
