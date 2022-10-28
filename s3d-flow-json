@@ -1,0 +1,46 @@
+#!/bin/bash
+# shellcheck disable=SC2001
+set -e
+
+# Search upwards for CHANGES.md
+until [ -f CHANGES.md ]; do
+  cd ..
+done
+
+latest=$(
+  grep -E '^## \[[0-9]' < CHANGES.md \
+  | tail -n 1 \
+  | sed 's/.*\[//' \
+  | sed 's/\].*//'
+)
+
+penultimate=$(
+  grep -E '^## \[[0-9]' < CHANGES.md \
+  | grep -v -F "$latest" \
+  | tail -n 1 \
+  | sed 's/.*\[//' \
+  | sed 's/\].*//'
+)
+
+# shellcheck disable=SC2001
+is_final=$(echo "$latest" | sed 's/.*-//')
+
+if [[ "$is_final" == "$latest" ]]; then
+  is_final=true
+else
+  is_final=false
+fi
+
+origin_module=$(git remote get-url origin 2>&1 | sed 's/.*\///' | sed 's/\.git//')
+module=$(git remote get-url ssh | sed 's/.*\///' | sed 's/\.git//')
+module=${module:-$origin_module}
+
+release="$(echo "$latest" | sed 's/-.*//')"
+json=""
+json="$json{"
+json="$json  \"is_final\": \"$is_final\","
+json="$json  \"latest\": \"$latest\","
+json="$json  \"module\": \"$module\","
+json="$json  \"release\": \"$release\""
+json="$json}"
+echo -e "$json"
