@@ -6,3 +6,6 @@ Recently completed and planned work is tracked here.
 
 ## [0.1.11](.)
 - Updated `.terraform.lock.hcl`
+
+## [0.1.12](.)
+- Removed dependency on `s3d-flow-json`

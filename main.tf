@@ -1,9 +1,56 @@
-# This external requires that "s3d-flow-json" exists on the filesysem path.
-#
-# The "s3d-flow-json" script provides data about the current module.
 data "external" "this" {
   program = ["bash", "-c", <<-EOT
-    out="$(s3d-flow-json)" || out="{}"
+    set -e
+
+    # Search upwards for CHANGES.md
+    until [ -f CHANGES.md ]; do
+      cd ..
+    done
+
+    # Find the latest change
+    latest=$(
+      grep -E '^## \[[0-9]' < CHANGES.md \
+      | tail -n 1 \
+      | sed 's/.*\[//' \
+      | sed 's/\].*//'
+    )
+
+    # Determine if this is a "final" release (i.e. not a pre-release version)
+    # shellcheck disable=SC2001
+    is_final=$(echo "$latest" | sed 's/.*-//')
+    if [[ "$is_final" == "$latest" ]]; then
+      is_final=true
+    else
+      is_final=false
+    fi
+
+    # Remove the pre-release component from the versoin number
+    release="$(echo "$latest" | sed 's/-.*//')"
+
+    # Determine the module's GIT name
+    origin_module=$(git remote get-url origin 2>&1 | sed 's/.*\///' | sed 's/\.git//')
+    module=$(git remote get-url ssh | sed 's/.*\///' | sed 's/\.git//')
+    [ -n "$module" ] || module="$origin_module"
+
+    # Construct the JSON output
+    json=""
+    json="$json{"
+    json="$json  \"error\": \"error in $(pwd)\","
+    json="$json  \"is_final\": \"$is_final\","
+    json="$json  \"latest\": \"$latest\","
+    json="$json  \"module\": \"$module\","
+    json="$json  \"release\": \"$release\""
+    json="$json}"
+
+    # Output JSON
+    out="$(echo -e "$json")" || {
+      log="$(pwd)/$(uuidgen).log"
+      echo "$out" >> "$log"
+      out=""
+      out="$out{"
+      out="$out  \"error\": \"error in $log\""
+      out="$out}"
+    }
     echo "$out"
     EOT
   ]
@@ -15,9 +62,9 @@ locals {
   # See comments in "README.md".
   data = {
     is_final = try(local.result.is_final, false)
-    latest   = try(local.result.latest, "error")
-    module   = try(local.result.module, "error")
-    release  = try(local.result.release, "error")
+    latest   = try(local.result.latest, local.result.error)
+    module   = try(local.result.module, local.result.error)
+    release  = try(local.result.release, local.result.error)
   }
 
   # Determine of the module is the root module.
