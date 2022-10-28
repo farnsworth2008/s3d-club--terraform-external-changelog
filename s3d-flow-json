@@ -1,0 +1,46 @@
+#!/bin/bash
+# shellcheck disable=SC2001
+set -e
+
+# Search upwards for CHANGES.md
+until [ -f CHANGES.md ]; do
+  cd ..
+done
+
+# Find the latest change
+latest=$(
+  grep -E '^## \[[0-9]' < CHANGES.md \
+  | tail -n 1 \
+  | sed 's/.*\[//' \
+  | sed 's/\].*//'
+)
+
+# Determine if this is a "final" release (i.e. not a pre-release version)
+# shellcheck disable=SC2001
+is_final=$(echo "$latest" | sed 's/.*-//')
+if [[ "$is_final" == "$latest" ]]; then
+  is_final=true
+else
+  is_final=false
+fi
+
+# Remove the pre-release component from the versoin number
+release="$(echo "$latest" | sed 's/-.*//')"
+
+# Determine the module's GIT name
+origin_module=$(git remote get-url origin 2>&1 | sed 's/.*\///' | sed 's/\.git//')
+module=$(git remote get-url ssh | sed 's/.*\///' | sed 's/\.git//')
+module=${module:-$origin_module}
+
+# Construct the JSON output
+json=""
+json="$json{"
+json="$json  \"error\": \"error in $(pwd)\","
+json="$json  \"is_final\": \"$is_final\","
+json="$json  \"latest\": \"$latest\","
+json="$json  \"module\": \"$module\","
+json="$json  \"release\": \"$release\""
+json="$json}"
+
+# Output JSON
+echo -e "$json" | jq
