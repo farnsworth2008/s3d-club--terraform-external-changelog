@@ -93,12 +93,12 @@ locals {
   # The tags here are the ones this module provides as output. These tags
   # include the input tags as well as a tag based on the current module.
   tags = merge(var.tags, {
-    (join("-", [local.tag_prefix, local.module_name])) = local.data.release
+    (join("-", ["tf", local.module_name])) = local.release
   })
 
   # We include "test" as part of our prefix if the module is a pre-release
   # version.
-  tag_prefix = (
-    local.data.is_final ? "tf" : "tf-test"
+  release = (
+    local.data.is_final ? local.data.release : "${local.data.release}-x"
   )
 }
