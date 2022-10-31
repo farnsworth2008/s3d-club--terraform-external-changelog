@@ -6,3 +6,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.15](.) to [0.1.17](.)
 - Improved descriptions of variables and outputs
+
+## [0.1.18-1000](.)
+- Changed to use `-*` as suffix for pre-release versions
