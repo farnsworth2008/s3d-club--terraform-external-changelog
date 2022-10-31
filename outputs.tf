@@ -1,3 +1,11 @@
+output "release" {
+  value = local.release
+
+  description = <<-EOT
+    The current release.
+    EOT
+}
+
 output "tags" {
   value = local.tags
 
