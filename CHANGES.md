@@ -9,3 +9,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.18](.)
 - Changed to use `-x` as suffix for pre-release versions
+
+## [0.1.19](.)
+- Update to latest Terraform
