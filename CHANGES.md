@@ -4,11 +4,10 @@ This file describes the project history as it relates to tagged versions.
 ## [0.0.2](.) to [0.1.14](.)
 - Created early releases
 
-## [0.1.15](.) to [0.1.17](.)
-- Improved descriptions of variables and outputs
-
-## [0.1.18](.)
+## [0.1.15](.) to [0.1.19](.)
 - Changed to use `-x` as suffix for pre-release versions
-
-## [0.1.19](.)
+- Improved descriptions of variables and outputs
 - Update to latest Terraform
+
+## [0.1.20](.)
+- Updated `external` provider
