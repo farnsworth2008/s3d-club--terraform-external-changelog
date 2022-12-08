@@ -9,10 +9,10 @@ data "external" "this" {
 
     # Find the latest change
     latest=$(
-      grep -E '^## \[[0-9]' < CHANGES.md \
+      grep -E '^## [0-9]' < CHANGES.md \
       | tail -n 1 \
-      | sed 's/.*\[//' \
-      | sed 's/\].*//'
+      | sed 's/.* //' \
+      | sed 's/ .*//'
     )
 
     # Determine if this is a "final" release (i.e. not a pre-release version)
